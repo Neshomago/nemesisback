@@ -1907,20 +1907,13 @@ def warehousecategoryadd():
 	try:
 		_json = request.json
 		_category = _json['category_name']
-		if request.method == 'POST':
-			sql = "INSERT INTO n_nemesis_n_itemscategory_model (category_name) SELECT (%s) WHERE NOT EXISTS(select category_name from n_nemesis_n_itemscategory_model Where category_name = %s) LIMIT 1"
-			data = (_category)
-			conn = mysql.connect()
-			cursor = conn.cursor()
-			cursor.execute(sql, data)
-			conn.commit()
-			resp = jsonify('New category added succesfully')
-			resp.status_code = 200
-			return resp
-		else:
-			#return not_found()
-			err_msg = 'Category could not be added.'
-			return err_msg
+		conn = mysql.connect()
+		cursor = conn.cursor(pymysql.cursors.DictCursor)
+		cursor.execute("INSERT INTO n_nemesis_n_itemscategory_model (category_name) VALUES (%s) WHERE NOT EXISTS(select category_name from n_nemesis_n_itemscategory_model Where category_name = %s) LIMIT 1",_category)
+		row = cursor.fetchall()
+		resp = jsonify(row)
+		resp.status_code = 200
+		return resp
 	except Exception as e:
 		print(e)
 	finally:
