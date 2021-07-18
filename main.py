@@ -286,7 +286,7 @@ def contacts():
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * FROM n_nemesis_n_contact_model ORDER BY id DESC")
+		cursor.execute("SELECT b.id as bid, RoleA, RoleC, RoleE, RoleT, a.* FROM n_nemesis_n_contact_model as a, n_nemesis_users_user_model as b WHERE a.email=b.email ORDER BY id DESC")
 		rows = cursor.fetchall()
 		resp = jsonify(rows)
 		resp.status_code = 200
