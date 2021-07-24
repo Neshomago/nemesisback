@@ -1054,13 +1054,14 @@ def ticket_datesearch():
 		# validate the received values
 		if request.method == 'POST':
 			# save edits
-			sql = "SELECT * FROM n_nemesis_n_ticket_model WHERE creationDate >= %s AND creationdDate <= %s"
+			sql = "SELECT * FROM n_nemesis_n_ticket_model WHERE creationDate >= %s AND creationDate <= %s"
 			data = (_strFechaInicio, _strFechaFin)
 			conn = mysql.connect()
 			cursor = conn.cursor()
 			cursor.execute(sql, data)
+			row=cursor.fetchall()
 			conn.commit()
-			resp = jsonify('Date range successfully!')
+			resp = jsonify(row)
 			resp.status_code = 200
 			return resp
 		else:
@@ -1273,8 +1274,8 @@ def filterDateTicket():
 			cursor = conn.cursor()
 			cursor.execute(sql, data)
 			conn.commit()
-			resp = jsonify('Date ticket ordering')
-			resp.status_code = 200
+			#resp = jsonify('Date ticket ordering')
+			#resp.status_code = 200
 			return resp
 		else:
 			return not_found()
@@ -1909,7 +1910,8 @@ def warehousecategoryadd():
 		_category = _json['category_name']
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("INSERT INTO n_nemesis_n_itemscategory_model (category_name) VALUES (%s) WHERE NOT EXISTS(select category_name from n_nemesis_n_itemscategory_model Where category_name = %s) LIMIT 1",_category)
+		#cursor.execute("INSERT INTO n_nemesis_n_itemscategory_model (category_name) VALUES (%s) WHERE NOT EXISTS(select category_name from n_nemesis_n_itemscategory_model Where category_name = %s) LIMIT 1",_category)
+		cursor.execute("INSERT INTO n_nemesis_n_itemscategory_model (category_name) VALUES (%s)",_category)
 		row = cursor.fetchall()
 		resp = jsonify(row)
 		resp.status_code = 200
