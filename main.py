@@ -1567,7 +1567,7 @@ def buscarItemV():
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
 		#	cursor.execute('SELECT id, count(name)as total, name, serial, description, categoryId, version, legacyId FROM n_nemesis_n_warehouseitem_model WHERE (version is null or version = "") group by name')
-		cursor.execute('SELECT id, name, serial, description, categoryId, version, legacyId FROM n_nemesis_n_warehouseitem_model WHERE (version is null or version = "")')
+		cursor.execute('SELECT id, name, serial, description, categoryId, version, legacyId FROM n_nemesis_n_warehouseitem_model WHERE (version is null or version = "") GROUP BY name')
 		rows = cursor.fetchall()
 		resp = jsonify(rows)
 		resp.status_code = 200
